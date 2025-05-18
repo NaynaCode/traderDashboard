@@ -6,9 +6,9 @@ import StatusIndicator from '../components/StatusIndicator';
 const STATUS_URL = 'https://referralsgrow.com/trader/status.php';
 
 const users = [
-  { id: 1, name: 'Nayna' },
-  { id: 2, name: 'Andrea' },
-  { id: 3, name: 'Nimar' }
+  { id: 1, name: 'Nayna', icon: '👩🏼‍💻' },
+  { id: 2, name: 'Andrea', icon: '👩🏽‍💻' },
+  { id: 3, name: 'Nimar', icon: '👨🏻‍💻' }
 ];
 
 export default function Navbar({ onUserSwitch }) {
@@ -92,8 +92,8 @@ export default function Navbar({ onUserSwitch }) {
           ))}
         </ul>
         <button className="user-button">
-          <span className="user-icon">👤</span>
-          <span className="user-name">{currentUser.name}</span>
+          <span className="user-icon">{currentUser.icon}</span>
+          <span className="user-name"><strong>{currentUser.name}</strong></span>
         </button>
       </div>
     </nav>

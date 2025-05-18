@@ -8,7 +8,7 @@ import './styles/Navbar.css';
 import './styles/Dashboard.css';
 
 function App() {
-  const[currentUser, setCurrentUser] = useState({id:1, name:'Nayna'});
+  const[currentUser, setCurrentUser] = useState({id:1, name:'Nayna', icon: '👩🏼‍💻'});
   const handleSwitchUser = (user) => {
     setCurrentUser(user);
   }
