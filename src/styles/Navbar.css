@@ -1,0 +1,142 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #ffffff;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.brand {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #006A71, #9ACBD0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.user-switch {
+  position: relative;
+}
+
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f1f6f9;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.user-button:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.user-icon {
+  font-size: 1.2rem;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.user-menu {
+  position: absolute;
+  top: 80%;
+  right: 5%;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0;
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s;
+}
+
+.user-switch:hover .user-menu,
+.user-switch:focus-within .user-menu {
+  opacity: 1;
+  display: block;
+  visibility: visible;
+}
+
+.user-menu li button {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: #333;
+  transition: background 0.2s;
+}
+
+.user-menu li button:hover {
+  background: #f0f4f8;
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu li a {
+  position: relative;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #555;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+
+.nav-menu li a:hover,
+.nav-menu li a.active {
+  color: #006A71;
+}
+
+.nav-menu li a::after {
+  content: '';
+  display: block;
+  height: 3px;
+  width: 0;
+  background: #006A71;
+  border-radius: 2px;
+  transition: width 0.3s;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-menu li a:hover::after,
+.nav-menu li a.active::after {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    grid-template-columns: 1fr;
+    grid-row-gap: 1rem;
+  }
+  .navbar-left,
+  .nav-menu {
+    justify-content: center;
+  }
+  .nav-menu {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}

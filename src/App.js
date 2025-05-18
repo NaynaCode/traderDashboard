@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Dashboard from './pages/Dashboard';
+import Chart from './pages/Chart';
+import Pairs from './pages/Pairs';
 
 function App() {
+  const[currentUser, setCurrentUser] = useState({id:1, name:'Nayna'});
+  const handleSwitchUser = (user) => {
+    setCurrentUser(user);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Navbar onUserSwitch={handleSwitchUser} />
+      <div className='container mt-4'>
+        <Routes>
+          <Route path='/' element={<Dashboard />} />
+          <Route path='/chart' element={<Chart/>} />
+          <Route path='/pairs' element={<Pairs />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
