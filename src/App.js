@@ -4,6 +4,8 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Chart from './pages/Chart';
 import Pairs from './pages/Pairs';
+import './styles/Navbar.css';
+import './styles/Dashboard.css';
 
 function App() {
   const[currentUser, setCurrentUser] = useState({id:1, name:'Nayna'});
