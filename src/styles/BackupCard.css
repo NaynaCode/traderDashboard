@@ -1,0 +1,46 @@
+.bckp-card {
+  display: flex;
+  flex-direction: row;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+  align-content: center;
+  justify-content: center;
+  width: 540px;
+}
+
+.bckp-card:hover {
+  transform: translateY(-2px);
+}
+
+#usdt {
+  color: #006A71;
+}
+#tokens {
+  color: #006A71;
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+#backup-value h2 {
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+#backup-value h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.pie-chart-container {
+  width: 180px;
+  height: 150px; /* adjust as needed */
+}
+
+@media (max-width: 768px) {
+  .bckp-card {
+    scale: .82;
+  }
+}

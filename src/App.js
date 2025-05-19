@@ -6,6 +6,9 @@ import Chart from './pages/Chart';
 import Pairs from './pages/Pairs';
 import './styles/Navbar.css';
 import './styles/Dashboard.css';
+import './styles/BalanceCard.css';
+import './styles/BackupCard.css';
+import './styles/LogsTable.css';
 
 function App() {
   const[currentUser, setCurrentUser] = useState({id:1, name:'Nayna', icon: '👩🏼‍💻'});
