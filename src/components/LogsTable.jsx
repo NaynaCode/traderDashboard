@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import '../styles/LogsTable.css';
 
 export default function LogsTable({ logs }) {
   const [filter, setFilter] = useState('all');

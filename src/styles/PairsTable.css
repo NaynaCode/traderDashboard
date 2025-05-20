@@ -1,0 +1,105 @@
+.pairs-table-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 1rem;
+  margin-top: 1.5rem;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Search Bar */
+.pairs-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-input {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  width: 200px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input:focus {
+  outline: none;
+  border-color: #006A71;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Table Wrapper Scroll */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* smooth on iOS */
+}
+
+/* Table Styles */
+.pairs-table {
+  width: 100%;
+  min-width: 800px; /* match your column layout */
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+}
+
+.pairs-table th,
+.pairs-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.pairs-table thead th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Row hover effect */
+.pairs-table tbody tr {
+  background: #fff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.pairs-table tbody tr:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Progress Bar Container & Fill (if you add one) */
+.progress-bar-container {
+  background: #eceef1;
+  border-radius: 12px;
+  position: relative;
+  height: 30px;
+  overflow: hidden;
+}
+.progress-bar-filled {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+}
+.progress-bar-label {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .pairs-table th,
+  .pairs-table td {
+    padding: 0.5rem 0.75rem;
+  }
+  .pairs-table-container {
+    margin-top: 0;
+  }
+  .search-input {
+    width: 130px;
+  }
+}

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import StatusIndicator from './StatusIndicator';
+import '../styles/Navbar.css';
 
 const users = [
   { id: 1, name: 'Nayna', icon: '👩🏼‍💻' },

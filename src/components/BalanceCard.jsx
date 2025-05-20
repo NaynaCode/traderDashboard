@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/BalanceCard.css';
 
 const BALANCE_URL = 'https://referralsgrow.com/trader/balance.php';
 

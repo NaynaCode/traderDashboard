@@ -4,7 +4,6 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   padding: 1rem;
   margin-top: 1.5rem;
-  font-family: 'Rubik', sans-serif;
   width: 100%;
   overflow-x: hidden;
 }
@@ -19,7 +18,7 @@
 .filter-btns .pill {
   background: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 0.5rem 0.5rem;
   margin-right: 0.5rem;
   cursor: pointer;
@@ -27,27 +26,28 @@
 }
 
 .filter-btns .pill.active.all {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 .filter-btns .pill.active.trs {
-    box-shadow: 0 4px 12px rgba(44, 206, 112, 0.372);
+    background: rgba(44, 206, 112, 0.07);
+    box-shadow: 0 4px 6px rgba(44, 206, 112, 0.5);
 }
 .filter-btns .pill.active.err {
-    box-shadow: 0 4px 12px rgba(171, 40, 40, 0.317);
+    background: rgba(171, 40, 40, 0.07);
+    box-shadow: 0 4px 6px rgba(171, 40, 40, 0.5);
 }
 
 .search-input {
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 0.5rem 1rem;
   width: 200px;
   transition: border-color 0.2s;
-  background: #00697132;
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
 }
 .search-input:focus {
   outline: none;
   border-color: #006A71;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .table-wrapper {
@@ -88,7 +88,7 @@
   display: inline-block;
   padding: 0.5rem 0.75rem;
   border-radius: 20px;
-  font-size: .9rem;
+  font-size: 1rem;
   font-weight: 500;
   color: #fff;
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);

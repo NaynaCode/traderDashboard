@@ -1,4 +1,3 @@
-// src/components/StatusIndicator.jsx
 import React, { useEffect, useState } from 'react';
 
 const STATUS_URL = 'https://referralsgrow.com/trader/status.php';

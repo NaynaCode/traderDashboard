@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BalanceCard from '../components/BalanceCard';
 import BackupCard from '../components/BackupCard';
 import LogsTable from '../components/LogsTable';
+import '../styles/Dashboard.css';
 
 const LOGS_ENDPOINT = 'https://referralsgrow.com/trader/logs.php';
 const PAIRS_ENDPOINT = 'https://referralsgrow.com/trader/pairs.php';
@@ -30,7 +31,7 @@ export default function Dashboard() {
             console.error('Error fetching pairs:', err);
             setPairs([]); // Fallback to empty array on error
         }
-        }
+    }
 
     fetchPairs();
     fetchLogs();
