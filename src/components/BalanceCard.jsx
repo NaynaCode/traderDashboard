@@ -1,90 +1,71 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import '../styles/BalanceCard.css';
 
-const BALANCE_URL = 'https://referralsgrow.com/trader/balance.php';
+export default function BalanceCard({ currentBalance = 0, balanceHistory = [] }) {
+  // Pre‑process history: sort by timestamp ascending
+  const sortedHistory = useMemo(
+    () =>
+      balanceHistory
+        .map((h) => ({
+          ts: new Date(h.timestamp).getTime(),
+          bal: parseFloat(h.balance),
+        }))
+        .sort((a, b) => a.ts - b.ts),
+    [balanceHistory]
+  );
 
-export default function BalanceCard() {
-  const [currentBalance, setCurrentBalance] = useState(0);
-  const [change24h, setChange24h] = useState(null);
-  const [change7d, setChange7d] = useState(null);
-  const [change30d, setChange30d] = useState(null);
-
-  useEffect(() => {
-    const fetchBalance = async () => {
-      try {
-        const [currentRes, historyRes] = await Promise.all([
-          fetch(BALANCE_URL),
-          fetch(`${BALANCE_URL}?history=1`)
-        ]);
-
-        const currentData = await currentRes.json();
-        const historyData = await historyRes.json();
-
-        if (!currentData.success || !historyData.success) return;
-
-        const current = parseFloat(currentData.balance);
-        setCurrentBalance(current);
-
-        const allHistory = historyData.history
-          .map(entry => ({ timestamp: new Date(entry.timestamp), balance: parseFloat(entry.balance) }))
-          .sort((a, b) => a.timestamp - b.timestamp);
-
-        const findClosest = target => {
-          let closest = null;
-          for (const e of allHistory) {
-            if (e.timestamp <= target) closest = e.balance;
-            else break;
-          }
-          return closest;
-        };
-
-        const now = Date.now();
-        const periods = {
-          '1D': now - 86400_000,
-          '7D': now - 604_800_000,
-          '30D': now - 2592000000
-        };
-
-        const computePnL = past => past ? ((current - past) / past) * 100 : null;
-        const format = val => val == null || isNaN(val)
-          ? null
-          : { text: `${val >= 0 ? '+' : ''}${val.toFixed(2)}% ${val >= 0 ? '▲' : '▼'}`, positive: val >= 0 };
-
-        const pnl24 = computePnL(findClosest(periods['1D']));
-        const pnl7 = computePnL(findClosest(periods['7D']));
-        const pnl30 = computePnL(findClosest(periods['30D']));
-
-        setChange24h(format(pnl24));
-        setChange7d(format(pnl7));
-        setChange30d(format(pnl30));
-      } catch (err) {
-        console.error('Error fetching balance:', err);
+  // Compute P&L for 1D, 7D, 30D
+  const { pnl1d, pnl7d, pnl30d } = useMemo(() => {
+    const now = Date.now();
+    const ms = { '1D': 86400e3, '7D': 604800e3, '30D': 2592000000 };
+    const findPast = (cutoff) => {
+      let past = null;
+      for (const point of sortedHistory) {
+        if (point.ts <= cutoff) past = point.bal;
+        else break;
       }
+      return past;
     };
+    const compute = (past) => (past ? ((currentBalance - past) / past) * 100 : null);
+    const format = (v) =>
+      v == null || isNaN(v)
+        ? null
+        : {
+            text: `${v >= 0 ? '+' : ''}${v.toFixed(2)}% ${v >= 0 ? '▲' : '▼'}`,
+            positive: v >= 0,
+          };
 
-    fetchBalance();
-    const id = setInterval(fetchBalance, 300_000);
-    return () => clearInterval(id);
-  }, []);
+    const p1 = compute(findPast(now - ms['1D']));
+    const p7 = compute(findPast(now - ms['7D']));
+    const p30 = compute(findPast(now - ms['30D']));
+
+    return {
+      pnl1d: format(p1),
+      pnl7d: format(p7),
+      pnl30d: format(p30),
+    };
+  }, [currentBalance, sortedHistory]);
 
   return (
     <div className="stat-card">
       <h4>Portfolio Value</h4>
       <div className="value-row">
         <span className="main-value">${currentBalance.toFixed(2)}</span>
-        {change24h && (
-          <span className={change24h.positive ? 'change-pnl positive' : 'change-pnl negative'}>
-            {change24h.text}
+        {pnl1d && (
+          <span className={pnl1d.positive ? 'change-pnl positive' : 'change-pnl negative'}>
+            {pnl1d.text}
           </span>
         )}
         <span className="label24h">24h</span>
       </div>
       <div className="trend-row">
-        <span className={change7d?.positive ? 'pnl-secondary positive' : 'pnl-secondary negative'}>
-          7D: {change7d?.text || 'N/A'}
+        <span className={pnl7d?.positive ? 'pnl-secondary positive' : 'pnl-secondary negative'}>
+          7D: {pnl7d?.text || 'N/A'}
         </span>
-        <span className={change30d?.positive ? 'pnl-secondary positive' : 'pnl-secondary negative'}>
-          30D: {change30d?.text || 'N/A'}
+        <span
+          className={pnl30d?.positive ? 'pnl-secondary positive' : 'pnl-secondary negative'}
+        >
+          30D: {pnl30d?.text || 'N/A'}
         </span>
       </div>
     </div>

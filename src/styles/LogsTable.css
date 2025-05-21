@@ -70,7 +70,7 @@
 }
 
 .logs-table thead th {
-  background: #f9fafb;
+  background: #ebecec;
   font-weight: 600;
   color: #555;
 }
@@ -82,6 +82,12 @@
 .logs-table tbody tr:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.logs-table td:nth-child(6) {
+  border-radius: 12px;
+  border: dashed 2px #bddddf;
+  /* optionally also max-width or flex-shrink: */
 }
 
 .badge {

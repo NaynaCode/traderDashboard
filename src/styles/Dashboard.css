@@ -1,14 +1,13 @@
 body { margin:0; background:#00697132; }
 
 .dashboard-page { 
-    padding:.5rem; 
     max-width:1200px; 
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center; 
     align-items: center;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Monaco', monospace;
     overflow-x: hidden;
 }
 

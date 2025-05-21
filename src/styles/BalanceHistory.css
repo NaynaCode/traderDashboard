@@ -1,0 +1,33 @@
+.period-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: -10px;
+  margin-top: 1rem;
+}
+.chart-container {
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  height: 400px;
+  width: 100%;
+  overflow-x: auto;
+}
+@media (max-width: 576px) {
+  .cards { flex-direction: column; }
+  .chart-container { height: 300px; }
+  .period-group {
+    margin-top: -10px;
+  }
+}
+
+.period-group .btn-light:hover {
+    background: #fff !important;
+}
+
+.period-group .active {
+    background: #fff !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: solid 0px;
+}

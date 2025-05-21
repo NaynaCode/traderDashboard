@@ -42,6 +42,8 @@
 @media (max-width: 768px) {
   .bckp-card {
     scale: .7;
-    margin-top: -50px;
+    margin-top: -49px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border-top: solid 3px #284a4b38;
   }
 }

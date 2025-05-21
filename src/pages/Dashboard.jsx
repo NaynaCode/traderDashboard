@@ -6,10 +6,13 @@ import '../styles/Dashboard.css';
 
 const LOGS_ENDPOINT = 'https://referralsgrow.com/trader/logs.php';
 const PAIRS_ENDPOINT = 'https://referralsgrow.com/trader/pairs.php';
+const BALANCE_ENDPOINT = 'https://referralsgrow.com/trader/balance.php'
 
 export default function Dashboard() {
   const [logs, setLogs] = useState([]);
   const [pairs, setPairs] = useState([]);
+  const [balance, setBalance] = useState();
+  const [balanceHistory, setBalanceHistory] = useState();
 
   useEffect(() => {
     async function fetchLogs() {
@@ -32,15 +35,35 @@ export default function Dashboard() {
             setPairs([]); // Fallback to empty array on error
         }
     }
+    async function fetchBalance() {
+        try {
+            const [currentRes, historyRes] = await Promise.all([
+            fetch(BALANCE_ENDPOINT),
+            fetch(`${BALANCE_ENDPOINT}?history=1`)
+            ]);
+
+            const currentData = await currentRes.json();
+            const historyData = await historyRes.json();
+
+            setBalance(currentData.balance || 0);
+            setBalanceHistory(historyData.history || []);
+        } catch (err) {
+            console.error('Error fetching balance:', err);
+        }
+    }
 
     fetchPairs();
     fetchLogs();
+    fetchBalance();
+    setInterval(fetchPairs, 300000);
+    setInterval(fetchLogs, 300000);
+    setInterval(fetchBalance, 300000);
   }, []);
 
   return (
     <div className='dashboard-page'>
       <div className='cards'>
-        <BalanceCard />
+        <BalanceCard currentBalance={balance} balanceHistory={balanceHistory} />
         <BackupCard logs={logs} pairs={pairs} />
       </div>
       <LogsTable logs={logs} />

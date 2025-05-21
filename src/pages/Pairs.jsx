@@ -6,10 +6,15 @@ import '../styles/Dashboard.css';
 
 const LOGS_ENDPOINT = 'https://referralsgrow.com/trader/logs.php';
 const PAIRS_ENDPOINT = 'https://referralsgrow.com/trader/pairs.php';
+const TARGET_ENDPOINT = 'https://referralsgrow.com/trader/target.php';
+const BALANCE_ENDPOINT = 'https://referralsgrow.com/trader/balance.php'
 
 export default function Pairs() {
     const [logs, setLogs] = useState([]);
     const [pairs, setPairs] = useState([]);
+    const [target, setTarget] = useState();
+    const [balance, setBalance] = useState();
+    const [balanceHistory, setBalanceHistory] = useState();
 
     useEffect(() => {
         async function fetchLogs() {
@@ -25,27 +30,55 @@ export default function Pairs() {
             try {
                 const res = await fetch(PAIRS_ENDPOINT);
                 const data = await res.json();
-                console.log('Fetched pairs data:', data); // Debug the raw response
-                setPairs(data.pairs || []); // Set pairs to data.pairs, or [] if undefined
+                setPairs(data.pairs || []);
             } catch (err) {
                 console.error('Error fetching pairs:', err);
-                setPairs([]); // Fallback to empty array on error
+                setPairs([]);
+            }
+        }
+        async function fetchTarget() {
+            try {
+                const res = await fetch(TARGET_ENDPOINT);
+                const data = await res.json();
+                setTarget(data.target || 1.5);
+            } catch (err) {
+                console.error('Error fetching target:', err);
+            }
+        }
+        async function fetchBalance() {
+            try {
+                const [currentRes, historyRes] = await Promise.all([
+                fetch(BALANCE_ENDPOINT),
+                fetch(`${BALANCE_ENDPOINT}?history=1`)
+                ]);
+
+                const currentData = await currentRes.json();
+                const historyData = await historyRes.json();
+
+                setBalance(currentData.balance || 0);
+                setBalanceHistory(historyData.history || []);
+            } catch (err) {
+                console.error('Error fetching balance:', err);
             }
         }
 
         fetchPairs();
         fetchLogs();
+        fetchTarget();
+        fetchBalance();
         setInterval(fetchPairs, 300000);
         setInterval(fetchLogs, 300000);
+        setInterval(fetchTarget, 300000);
+        setInterval(fetchBalance, 300000);
     }, [])
 
     return (
         <div className='dashboard-page'>
             <div className='cards'>
-            <BalanceCard />
+            <BalanceCard currentBalance={balance} balanceHistory={balanceHistory} />
             <BackupCard logs={logs} pairs={pairs} />
             </div>
-            <PairsTable pairs={pairs} />
+            <PairsTable pairs={pairs} target={target}/>
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import '../styles/PairsTable.css';
 
-export default function PairsTable({ pairs = [] }) {
+export default function PairsTable({ pairs = [], target }) {
   const [search, setSearch] = useState('');
 
   const displayedPairs = useMemo(() => {
@@ -19,9 +19,9 @@ export default function PairsTable({ pairs = [] }) {
   }, [pairs, search]);
 
   // Calculate progress towards the sell target
-  const calcProgress = (valueStr, targetStr) => {
+  const calcProgress = (valueStr, baseStr, trg) => {
     const current = parseFloat(valueStr.replace('$','')) || 0;
-    const threshold = parseFloat(targetStr.replace('$','')) || 1;
+    const threshold = (parseFloat(baseStr.replace('$','')) || 1) * trg;
     const pct = Math.min((current / threshold) * 100, 100);
     let color = '#e97171';
     if (pct >= 90) color = '#66d268';
@@ -55,7 +55,7 @@ export default function PairsTable({ pairs = [] }) {
           </thead>
           <tbody>
             {displayedPairs.map((pair, idx) => {
-              const { pct, color, label } = calcProgress(pair.value, pair.target);
+              const { pct, color, label } = calcProgress(pair.value, pair.base, target);
               return (
                 <tr key={pair.symbol}>
                   <td>{idx + 1}</td>
