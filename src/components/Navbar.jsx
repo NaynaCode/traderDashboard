@@ -38,6 +38,8 @@ export default function Navbar({ onUserSwitch }) {
         ))}
       </ul>
 
+      <h3 className="pepa" data-tooltip="Roooull">🐕</h3>
+
       <div className="user-switch">
         <ul className="user-menu">
           {users.map(u => (

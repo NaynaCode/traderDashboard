@@ -18,7 +18,61 @@
 
 .user-switch {
   position: relative;
-  margin-left: 21.5rem;
+}
+
+.pepa {
+  margin-left: 24.5rem;
+  margin-right: .5rem;
+}
+.pepa {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 2rem;
+}
+
+/* Bubble text */
+.pepa::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 50%;                     /* vertically center */
+  right: 100%;                  /* place to the left of the element */
+  transform: translate( -8px, -50% );
+  background: rgba(116, 100, 132, 0.8);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 50px;
+  padding: 15px;
+}
+
+/* Little arrow pointing right */
+.pepa::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 70%;
+  transform: translate(0, -50%) translateX(-2px);
+  border: 6px solid transparent;
+  border-left-color: rgba(0,0,0,0.8);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+/* Show on hover */
+.pepa:hover::after,
+.pepa:hover::before {
+  opacity: 1;
+  /* push bubble a bit further left when visible */
+  transform: translate( -12px, -50% );
 }
 
 .user-button {
@@ -90,7 +144,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  margin-left: 10rem;
+  margin-left: 13.5rem;
 }
 
 .nav-menu li a {
@@ -141,20 +195,25 @@
     flex-wrap: wrap;
     gap: .5rem;
     margin-left: 0;
+    margin-right: 7rem;
   }
-  .user-switch {
-    margin-left: 3rem;
-    margin-right: .85rem;
+  .pepa {
+    margin-left: 0;
   }
 }
 
 .status-indicator { font-size:.9rem; padding:.2rem .9rem; border-radius:20px; align-content: center;
-    animation: pulse 1.5s infinite; box-shadow: 0 2px 6px rgba(0,0,0,0.1);}
-.status-healthy { background:#e0f7eb; color:#1b5e20; }
-.status-critical { background:#fdecea; color:#b71c1c; }
+     box-shadow: 0 2px 6px rgba(0,0,0,0.1);}
+.status-healthy { background:#e0f7eb; color:#1b5e20; animation: pulse 1.5s infinite;}
+.status-critical { background:#fdcfcf; color:#b71c1c; animation: pulsex2 .5s infinite;}
 
 @keyframes pulse {
     0% { opacity: 1; }
     50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+@keyframes pulsex2 {
+    0% { opacity: 1; }
+    50% { opacity: 0.1; }
     100% { opacity: 1; }
 }
