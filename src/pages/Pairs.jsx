@@ -1,84 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import BalanceCard from '../components/BalanceCard';
-import BackupCard from '../components/BackupCard';
-import PairsTable from '../components/PairsTable';
-import '../styles/Dashboard.css';
+import BalanceCard   from '../components/BalanceCard';
+import BackupCard    from '../components/BackupCard';
+import PairsTable    from '../components/PairsTable';
+import '../styles/Pages.css';
 
-const LOGS_ENDPOINT = 'https://referralsgrow.com/trader/logs.php';
-const PAIRS_ENDPOINT = 'https://referralsgrow.com/trader/pairs.php';
-const TARGET_ENDPOINT = 'https://referralsgrow.com/trader/target.php';
-const BALANCE_ENDPOINT = 'https://referralsgrow.com/trader/balance.php'
+import {
+  fetchLogs,
+  fetchPairs,
+  fetchTarget,
+  fetchBalance,
+  fetchBackup
+} from '../helpers/fetchFunctions';
 
 export default function Pairs() {
-    const [logs, setLogs] = useState([]);
-    const [pairs, setPairs] = useState([]);
-    const [target, setTarget] = useState();
-    const [balance, setBalance] = useState();
-    const [balanceHistory, setBalanceHistory] = useState();
+  const [logs,           setLogs]           = useState([]);
+  const [pairs,          setPairs]          = useState([]);
+  const [target,         setTarget]         = useState(1.5);
+  const [balance,        setBalance]        = useState(0);
+  const [balanceHistory, setBalanceHistory] = useState([]);
+  const [backup,         setBackup]         = useState(0);
+  const [usdt,           setUsdt]           = useState(0);
 
-    useEffect(() => {
-        async function fetchLogs() {
-            try {
-                const res = await fetch(LOGS_ENDPOINT);
-                const data = await res.json();
-                setLogs(data); // Consider adding Array.isArray check here too if needed
-            } catch (err) {
-                console.error('Error fetching trade_logs:', err);
-            }
-        }
-        async function fetchPairs() {
-            try {
-                const res = await fetch(PAIRS_ENDPOINT);
-                const data = await res.json();
-                setPairs(data.pairs || []);
-            } catch (err) {
-                console.error('Error fetching pairs:', err);
-                setPairs([]);
-            }
-        }
-        async function fetchTarget() {
-            try {
-                const res = await fetch(TARGET_ENDPOINT);
-                const data = await res.json();
-                setTarget(data.target || 1.5);
-            } catch (err) {
-                console.error('Error fetching target:', err);
-            }
-        }
-        async function fetchBalance() {
-            try {
-                const [currentRes, historyRes] = await Promise.all([
-                fetch(BALANCE_ENDPOINT),
-                fetch(`${BALANCE_ENDPOINT}?history=1`)
-                ]);
+  useEffect(() => {
+    // single loader function
+    async function loadAll() {
+      try {
+        const [logsData, pairsData, tgt, bal] = await Promise.all([
+          fetchLogs(),
+          fetchPairs(),
+          fetchTarget(),
+          fetchBalance()
+        ]);
+        setLogs(logsData);
+        setPairs(pairsData);
+        setTarget(tgt);
+        setBalance(bal.current);
+        setBalanceHistory(bal.history);
 
-                const currentData = await currentRes.json();
-                const historyData = await historyRes.json();
+        const { backup: b, usdt: u } = await fetchBackup(logsData);
+            setBackup(b);
+            setUsdt(u);
+      } catch (err) {
+        console.error('Dashboard loading error:', err);
+      }
+    }
 
-                setBalance(currentData.balance || 0);
-                setBalanceHistory(historyData.history || []);
-            } catch (err) {
-                console.error('Error fetching balance:', err);
-            }
-        }
+    loadAll();
+    const id = setInterval(loadAll, 300_000);
+    return () => clearInterval(id);
+  }, []);
 
-        fetchPairs();
-        fetchLogs();
-        fetchTarget();
-        fetchBalance();
-        setInterval(fetchPairs, 300000);
-        setInterval(fetchLogs, 300000);
-        setInterval(fetchTarget, 300000);
-        setInterval(fetchBalance, 300000);
-    }, [])
-
-    return (
-        <div className='dashboard-page'>
-            <div className='cards'>
-            <BalanceCard currentBalance={balance} balanceHistory={balanceHistory} />
-            <BackupCard logs={logs} pairs={pairs} />
-            </div>
-            <PairsTable pairs={pairs} target={target}/>
-        </div>
-    )
+  return (
+    <div className="dashboard-page">
+      <div className="cards">
+        <BalanceCard
+          currentBalance={balance}
+          balanceHistory={balanceHistory}
+        />
+        <BackupCard
+            logs={logs}
+            pairs={pairs}
+            backup={backup}
+            usdt={usdt}
+        />
+      </div>
+      <PairsTable pairs={pairs} target={target} />
+    </div>
+  );
 }

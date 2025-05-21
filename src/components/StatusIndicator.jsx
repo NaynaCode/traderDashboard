@@ -1,8 +1,6 @@
-// src/components/StatusIndicator.jsx
 import React, { useEffect, useState } from 'react';
 import MessageModal from './MessageModal';
-
-const STATUS_URL = 'https://referralsgrow.com/trader/status.php';
+import { fetchStatus } from '../helpers/fetchFunctions';
 
 export default function StatusIndicator() {
   const [status, setStatus] = useState('stopped');
@@ -10,27 +8,14 @@ export default function StatusIndicator() {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    let intervalId;
-    const fetchStatus = async () => {
-      try {
-        const res = await fetch(STATUS_URL);
-        const data = await res.json();
-        if (!data.timestamp) {
-          setStatus('stopped');
-          setLastTimestamp(null);
-        } else {
-          const ts = new Date(data.timestamp);
-          const age = (Date.now() - ts.getTime())/1000;
-          setStatus(age <= 1800 ? 'running' : 'stopped');
-          setLastTimestamp(ts.toLocaleString());
-        }
-      } catch {
-        setStatus('stopped');
-        setLastTimestamp(null);
-      }
+    const loadStatus = async () => {
+      const { status, timestamp } = await fetchStatus();
+      setStatus(status);
+      setLastTimestamp(timestamp);
     };
-    fetchStatus();
-    intervalId = setInterval(fetchStatus, 120_000);
+
+    loadStatus();
+    const intervalId = setInterval(loadStatus, 120_000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -39,7 +24,7 @@ export default function StatusIndicator() {
   return (
     <>
       <div
-        className={`status-indicator ${healthy? 'status-healthy':'status-critical'}`}
+        className={`status-indicator ${healthy ? 'status-healthy' : 'status-critical'}`}
         onClick={() => !healthy && setModalOpen(true)}
       >
         {healthy ? '🟢 RUNNING' : '🔴 OFFLINE'}
@@ -54,4 +39,3 @@ export default function StatusIndicator() {
     </>
   );
 }
-

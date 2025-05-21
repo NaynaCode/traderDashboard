@@ -1,71 +1,69 @@
 import React, { useState, useEffect } from 'react';
-import BalanceCard from '../components/BalanceCard';
-import BackupCard from '../components/BackupCard';
+import BalanceCard   from '../components/BalanceCard';
+import BackupCard    from '../components/BackupCard';
 import BalanceHistory from '../components/BalanceHistory';
-import '../styles/Dashboard.css';
+import '../styles/Pages.css';
 
-const LOGS_ENDPOINT = 'https://referralsgrow.com/trader/logs.php';
-const PAIRS_ENDPOINT = 'https://referralsgrow.com/trader/pairs.php';
-const BALANCE_ENDPOINT = 'https://referralsgrow.com/trader/balance.php'
+import {
+  fetchLogs,
+  fetchPairs,
+  fetchBalance,
+  fetchBackup
+} from '../helpers/fetchFunctions';
 
-export default function Pairs() {
-    const [logs, setLogs] = useState([]);
-    const [pairs, setPairs] = useState([]);
-    const [balance, setBalance] = useState();
-    const [balanceHistory, setBalanceHistory] = useState();
+export default function Chart() {
+  const [logs,           setLogs]           = useState([]);
+  const [pairs,          setPairs]          = useState([]);
+  const [balance,        setBalance]        = useState(0);
+  const [balanceHistory, setBalanceHistory] = useState([]);
+  const [backup,         setBackup]         = useState(0);
+  const [usdt,           setUsdt]           = useState(0);
 
-    useEffect(() => {
-        async function fetchLogs() {
-            try {
-                const res = await fetch(LOGS_ENDPOINT);
-                const data = await res.json();
-                setLogs(data); // Consider adding Array.isArray check here too if needed
-            } catch (err) {
-                console.error('Error fetching trade_logs:', err);
-            }
-        }
-        async function fetchPairs() {
-            try {
-                const res = await fetch(PAIRS_ENDPOINT);
-                const data = await res.json();
-                setPairs(data.pairs || []);
-            } catch (err) {
-                console.error('Error fetching pairs:', err);
-                setPairs([]);
-            }
-        }
-        async function fetchBalance() {
-            try {
-                const [currentRes, historyRes] = await Promise.all([
-                fetch(BALANCE_ENDPOINT),
-                fetch(`${BALANCE_ENDPOINT}?history=1`)
-                ]);
+  useEffect(() => {
+    async function loadAll() {
+      try {
+        const [logsData, pairsData, balData] = await Promise.all([
+          fetchLogs(),
+          fetchPairs(),
+          fetchBalance()
+        ]);
 
-                const currentData = await currentRes.json();
-                const historyData = await historyRes.json();
+        setLogs(logsData);
+        setPairs(pairsData);
+        setBalance(balData.current);
+        setBalanceHistory(balData.history);
 
-                setBalance(currentData.balance || 0);
-                setBalanceHistory(historyData.history || []);
-            } catch (err) {
-                console.error('Error fetching balance:', err);
-            }
-        }
+        const { backup: b, usdt: u } = await fetchBackup(logsData);
+            setBackup(b);
+            setUsdt(u);
+      } catch (err) {
+        console.error('Error loading dashboard data:', err);
+      }
+    }
 
-        fetchPairs();
-        fetchLogs();
-        fetchBalance();
-        setInterval(fetchPairs, 300000);
-        setInterval(fetchLogs, 300000);
-        setInterval(fetchBalance, 300000);
-    }, [])
+    loadAll();
+    const id = setInterval(loadAll, 300_000);
+    return () => clearInterval(id);
+  }, []);
 
-    return (
-        <div className='dashboard-page'>
-            <div className='cards'>
-            <BalanceCard currentBalance={balance} balanceHistory={balanceHistory} />
-            <BackupCard logs={logs} pairs={pairs} />
-            </div>
-            <BalanceHistory balance={balance} balanceHistory={balanceHistory}/>
-        </div>
-    )
+  return (
+    <div className="dashboard-page">
+      <div className="cards">
+        <BalanceCard
+          currentBalance={balance}
+          balanceHistory={balanceHistory}
+        />
+        <BackupCard
+            logs={logs}
+            pairs={pairs}
+            backup={backup}
+            usdt={usdt}
+        />
+      </div>
+      <BalanceHistory
+        balance={balance}
+        balanceHistory={balanceHistory}
+      />
+    </div>
+  );
 }

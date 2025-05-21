@@ -1,72 +1,69 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import BalanceCard from '../components/BalanceCard';
-import BackupCard from '../components/BackupCard';
-import LogsTable from '../components/LogsTable';
-import '../styles/Dashboard.css';
+import BackupCard  from '../components/BackupCard';
+import LogsTable   from '../components/LogsTable';
+import '../styles/Pages.css';
 
-const LOGS_ENDPOINT = 'https://referralsgrow.com/trader/logs.php';
-const PAIRS_ENDPOINT = 'https://referralsgrow.com/trader/pairs.php';
-const BALANCE_ENDPOINT = 'https://referralsgrow.com/trader/balance.php'
+import {
+  fetchLogs,
+  fetchPairs,
+  fetchBalance,
+  fetchBackup
+} from '../helpers/fetchFunctions';
 
 export default function Dashboard() {
-  const [logs, setLogs] = useState([]);
-  const [pairs, setPairs] = useState([]);
-  const [balance, setBalance] = useState();
-  const [balanceHistory, setBalanceHistory] = useState();
+  const [logs,           setLogs]           = useState([]);
+  const [pairs,          setPairs]          = useState([]);
+  const [balance,        setBalance]        = useState(0);
+  const [balanceHistory, setBalanceHistory] = useState([]);
+  const [backup,         setBackup]         = useState(0);
+  const [usdt,           setUsdt]           = useState(0);
 
   useEffect(() => {
-    async function fetchLogs() {
+    async function loadData() {
       try {
-        const res = await fetch(LOGS_ENDPOINT);
-        const data = await res.json();
-        setLogs(data); // Consider adding Array.isArray check here too if needed
+        const [logsData, pairsData, balanceData] = await Promise.all([
+          fetchLogs(),
+          fetchPairs(),
+          fetchBalance()
+        ]);
+
+        setLogs(logsData);
+        setPairs(pairsData);
+        setBalance(balanceData.current);
+        setBalanceHistory(balanceData.history || []);
+
+        // now fetch backup & usdt based on those logs
+        const { backup: b, usdt: u } = await fetchBackup(logsData);
+        setBackup(b);
+        setUsdt(u);
+
       } catch (err) {
-        console.error('Error fetching trade_logs:', err);
+        console.error('Error loading dashboard data:', err);
       }
     }
-    async function fetchPairs() {
-        try {
-            const res = await fetch(PAIRS_ENDPOINT);
-            const data = await res.json();
-            console.log('Fetched pairs data:', data); // Debug the raw response
-            setPairs(data.pairs || []); // Set pairs to data.pairs, or [] if undefined
-        } catch (err) {
-            console.error('Error fetching pairs:', err);
-            setPairs([]); // Fallback to empty array on error
-        }
-    }
-    async function fetchBalance() {
-        try {
-            const [currentRes, historyRes] = await Promise.all([
-            fetch(BALANCE_ENDPOINT),
-            fetch(`${BALANCE_ENDPOINT}?history=1`)
-            ]);
 
-            const currentData = await currentRes.json();
-            const historyData = await historyRes.json();
-
-            setBalance(currentData.balance || 0);
-            setBalanceHistory(historyData.history || []);
-        } catch (err) {
-            console.error('Error fetching balance:', err);
-        }
-    }
-
-    fetchPairs();
-    fetchLogs();
-    fetchBalance();
-    setInterval(fetchPairs, 300000);
-    setInterval(fetchLogs, 300000);
-    setInterval(fetchBalance, 300000);
+    loadData();
+    const interval = setInterval(loadData, 300_000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div className='dashboard-page'>
       <div className='cards'>
-        <BalanceCard currentBalance={balance} balanceHistory={balanceHistory} />
-        <BackupCard logs={logs} pairs={pairs} />
+        <BalanceCard 
+          currentBalance={balance}
+          balanceHistory={balanceHistory}
+        />
+        <BackupCard
+          logs={logs}
+          pairs={pairs}
+          backup={backup}
+          usdt={usdt}
+        />
       </div>
       <LogsTable logs={logs} />
     </div>
   );
 }
+
