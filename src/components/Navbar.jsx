@@ -10,13 +10,28 @@ const users = [
   { id: 3, name: 'Nimar', icon: '👨🏻‍💻' }
 ];
 
+function randomPick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 export default function Navbar({ onUserSwitch }) {
   const [currentUser, setCurrentUser] = useState(users[0]);
+  const [pepaTooltip, setPepaTooltip] = useState('');
 
   const handleUserSelect = (user) => {
     setCurrentUser(user);
     onUserSwitch?.(user);
   };
+
+  const pepaPhrases = [
+    'Roooull',
+    '🐾🐾',
+    '(wiggles)',
+    '🍗🍗',
+    '(ZOOMies)',
+    'Woof!',
+    '🍞pls',
+  ];
 
   return (
     <nav className="navbar">
@@ -38,7 +53,14 @@ export default function Navbar({ onUserSwitch }) {
         ))}
       </ul>
 
-      <h3 className="pepa" data-tooltip="Roooull">🐕</h3>
+      <h3
+        className="pepa"
+        data-tooltip={pepaTooltip}
+        onMouseEnter={() => setPepaTooltip(randomPick(pepaPhrases))}
+        onMouseLeave={() => setPepaTooltip('')}
+      >
+        🐕
+      </h3>
 
       <div className="user-switch">
         <ul className="user-menu">
