@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react'
 import Chart from 'chart.js/auto'
-import StatusIndicator from './StatusIndicator'
 import '../styles/BalanceHistory.css'
 
 export default function BalanceHistory({ balance, balanceHistory = [] }) {
@@ -8,35 +7,10 @@ export default function BalanceHistory({ balance, balanceHistory = [] }) {
   const chartInstance = useRef(null)
   const [period, setPeriod] = useState('day')
 
-  // pre‑compute P&L
-  const pnls = useMemo(() => {
-    const now = Date.now()
-    const periodsMs = {
-      day: 24 * 3600e3,
-      week: 7 * 24 * 3600e3,
-      month: 30 * 24 * 3600e3,
-    }
-    const map = {}
-    const sorted = balanceHistory
-      .map(h => ({ ts: new Date(h.timestamp).getTime(), bal: h.balance }))
-      .sort((a, b) => a.ts - b.ts)
-
-    for (let key of ['day', 'week', 'month']) {
-      const cutoff = now - periodsMs[key]
-      let past = sorted.find(h => h.ts >= cutoff)
-      if (!past) past = sorted[0]
-      map[key] =
-        past && past.bal > 0 ? ((balance - past.bal) / past.bal) * 100 : null
-    }
-    return map
-  }, [balance, balanceHistory])
-
-  // (re)draw chart on history or period change
   useEffect(() => {
     if (!chartRef.current) return
     const ctx = chartRef.current.getContext('2d')
 
-    // filter & down‑sample
     const now = Date.now()
     const days = { day: 1, week: 7, month: 30 }[period]
     const cutoff = now - days * 24 * 3600e3

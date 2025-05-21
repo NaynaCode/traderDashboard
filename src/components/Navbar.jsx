@@ -1,12 +1,13 @@
+// src/components/Navbar.jsx
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import StatusIndicator from './StatusIndicator';
 import '../styles/Navbar.css';
 
 const users = [
-  { id: 1, name: 'Nayna', icon: '👩🏼‍💻' },
-  { id: 2, name: 'Andrea', icon: '👩🏽‍💻' },
-  { id: 3, name: 'Nimar', icon: '👨🏻‍💻' }
+  { id: 1, name: 'Nayna', icon: '👩🏼‍💻', url: 'trader' },
+  { id: 2, name: 'Andrea', icon: '👩🏽‍💻', url: 'traderandr' },
+  { id: 3, name: 'Nimar', icon: '👨🏻‍💻', url: 'tradernmr' }
 ];
 
 function randomPick(arr) {
@@ -16,11 +17,13 @@ function randomPick(arr) {
 export default function Navbar({ onUserSwitch }) {
   const [currentUser, setCurrentUser] = useState(users[0]);
   const [pepaTooltip, setPepaTooltip] = useState('');
+  const navigate = useNavigate();           // ← get the navigation fn
 
   const handleUserSelect = (user) => {
     setCurrentUser(user);
     onUserSwitch?.(user);
-  };
+    window.location.href = `https://referralsgrow.com/${user.url}`;
+};
 
   const pepaPhrases = [
     'Roooull',
@@ -40,13 +43,11 @@ export default function Navbar({ onUserSwitch }) {
       </div>
 
       <ul className="nav-menu">
-        {['dashboard', 'chart', 'pairs'].map(path => (
+        {['dashboard','chart','pairs'].map(path => (
           <li key={path}>
-            <NavLink
-              to={path === 'dashboard' ? '/' : `/${path}`}
-              className={({ isActive }) => isActive ? 'active' : ''}
-            >
-              {path[0].toUpperCase() + path.slice(1)}
+            <NavLink to={path === 'dashboard' ? '/' : `/${path}`}
+                     className={({isActive}) => isActive ? 'active':''}>
+              {path[0].toUpperCase()+path.slice(1)}
             </NavLink>
           </li>
         ))}
@@ -79,3 +80,4 @@ export default function Navbar({ onUserSwitch }) {
     </nav>
   );
 }
+

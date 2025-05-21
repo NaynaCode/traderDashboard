@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import BalanceCard   from '../components/BalanceCard';
-import BackupCard    from '../components/BackupCard';
+import BalanceCard    from '../components/BalanceCard';
+import BackupCard     from '../components/BackupCard';
 import BalanceHistory from '../components/BalanceHistory';
 import '../styles/Pages.css';
 
@@ -27,17 +27,16 @@ export default function Chart() {
           fetchPairs(),
           fetchBalance()
         ]);
-
         setLogs(logsData);
         setPairs(pairsData);
         setBalance(balData.current);
         setBalanceHistory(balData.history);
 
         const { backup: b, usdt: u } = await fetchBackup(logsData);
-            setBackup(b);
-            setUsdt(u);
+        setBackup(b);
+        setUsdt(u);
       } catch (err) {
-        console.error('Error loading dashboard data:', err);
+        console.error('Chart loading error:', err);
       }
     }
 
@@ -54,10 +53,10 @@ export default function Chart() {
           balanceHistory={balanceHistory}
         />
         <BackupCard
-            logs={logs}
-            pairs={pairs}
-            backup={backup}
-            usdt={usdt}
+          logs={logs}
+          pairs={pairs}
+          backup={backup}
+          usdt={usdt}
         />
       </div>
       <BalanceHistory
