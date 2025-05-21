@@ -1,9 +1,12 @@
+// src/components/LogsTable.jsx
 import React, { useState, useMemo } from 'react';
+import MessageModal from './MessageModal';
 import '../styles/LogsTable.css';
 
 export default function LogsTable({ logs }) {
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
+  const [modal, setModal] = useState({ show: false, message: '' });
 
   const filteredLogs = useMemo(() => {
     let result = Array.isArray(logs) ? logs : [];
@@ -23,50 +26,57 @@ export default function LogsTable({ logs }) {
   }, [logs, filter, search]);
 
   return (
-    <div className="logs-table-container">
-      <div className="controls">
-        <div className="filter-btns">
-          <button
-            className={filter==='all' ? 'pill active all' : 'pill'}
-            onClick={()=>setFilter('all')}>All</button>
-          <button
-            className={filter==='error' ? 'pill active err' : 'pill'}
-            onClick={()=>setFilter('error')}>Errors</button>
-          <button
-            className={filter==='trades' ? 'pill active trs' : 'pill'}
-            onClick={()=>setFilter('trades')}>Trades</button>
+    <>
+      <div className="logs-table-container">
+        <div className="controls">
+          <div className="filter-btns">
+            <button className={filter==='all' ? 'pill active all' : 'pill'} onClick={()=>setFilter('all')}>All</button>
+            <button className={filter==='error' ? 'pill active err' : 'pill'} onClick={()=>setFilter('error')}>Errors</button>
+            <button className={filter==='trades' ? 'pill active trs' : 'pill'} onClick={()=>setFilter('trades')}>Trades</button>
+          </div>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search logs..."
+            value={search}
+            onChange={e=>setSearch(e.target.value)}
+          />
         </div>
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Search logs..."
-          value={search}
-          onChange={e=>setSearch(e.target.value)}
-        />
-      </div>
-      <div className="table-wrapper">
-        <table className="logs-table">
-          <thead>
-            <tr>
-              <th>Time</th><th>Action</th><th>Symbol</th>
-              <th>Amount</th><th>Price</th><th>Total</th><th>USDT</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredLogs.map((log, idx)=>(
-              <tr key={idx}>
-                <td>{log.timestamp}</td>
-                <td><span className={`badge ${log.action.toLowerCase()}`}>{log.action}</span></td>
-                <td><b>{log.symbol}</b></td>
-                <td>{log.amount!=null?parseFloat(log.amount).toFixed(4):'-'}</td>
-                <td>{log.price!=null?parseFloat(log.price).toFixed(4):'-'}</td>
-                <td>{log.total_cost!=null?`$${parseFloat(log.total_cost).toFixed(2)}`:'-'}</td>
-                <td><b>{log.usdt_balance!=null?`$${parseFloat(log.usdt_balance).toFixed(2)}`:'-'}</b></td>
+        <div className="table-wrapper">
+          <table className="logs-table">
+            <thead>
+              <tr>
+                <th>Time</th><th>Action</th><th>Symbol</th>
+                <th>Amount</th><th>Price</th><th>Total</th><th>USDT</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredLogs.map((log, idx)=>(
+                <tr key={idx}>
+                  <td>{log.timestamp}</td>
+                  <td onClick={()=>{
+                      setModal({ show:true, message: log.message });
+                    }}>
+                    <span className={`badge ${log.action.toLowerCase()}`}>{log.action}</span>
+                  </td>
+                  <td><b>{log.symbol}</b></td>
+                  <td>{log.amount!=null?parseFloat(log.amount).toFixed(4):'-'}</td>
+                  <td>{log.price!=null?parseFloat(log.price).toFixed(4):'-'}</td>
+                  <td>{log.total_cost!=null?`$${parseFloat(log.total_cost).toFixed(2)}`:'-'}</td>
+                  <td><b>{log.usdt_balance!=null?`$${parseFloat(log.usdt_balance).toFixed(2)}`:'-'}</b></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+
+      <MessageModal
+        show={modal.show}
+        title="Log Message"
+        body={modal.message}
+        onClose={() => setModal({ show:false, message: '' })}
+      />
+    </>
   );
 }
