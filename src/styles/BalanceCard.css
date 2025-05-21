@@ -6,7 +6,7 @@
   padding: 1.5rem;
   flex: 1;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  max-width: 420px;
+  width: 450px;
 }
 .stat-card:hover {
   transform: translateY(-4px);
@@ -71,3 +71,10 @@
   color:#b71c1c;
 }
 
+
+@media (max-width: 768px) {
+  .stat-card {
+    margin-bottom: 0;
+    background: #f4f4f4;
+  }
+}

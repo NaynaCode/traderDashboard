@@ -51,7 +51,7 @@
 }
 
 .pairs-table thead th {
-  background: #f9fafb;
+  background: #ebecec;
   font-weight: 600;
   color: #555;
 }
@@ -65,7 +65,18 @@
   transform: translateY(-2px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
+.pairs-table td:nth-child(3) {
+  border-radius: 12px;
+  border: solid 2px #bddddf;
+  width: 80px;
+  /* optionally also max-width or flex-shrink: */
+}
 
+.pairs-table th:nth-child(7),
+.pairs-table td:nth-child(7) {
+  min-width: 240px;
+  /* optionally also max-width or flex-shrink: */
+}
 /* Progress Bar Container & Fill (if you add one) */
 .progress-bar-container {
   background: #eceef1;

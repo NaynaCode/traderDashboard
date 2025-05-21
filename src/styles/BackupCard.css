@@ -8,7 +8,7 @@
   transition: transform 0.2s ease;
   align-content: center;
   justify-content: center;
-  width: 540px;
+  width: 600px;
 }
 
 .bckp-card:hover {
@@ -36,11 +36,12 @@
 
 .pie-chart-container {
   width: 180px;
-  height: 150px; /* adjust as needed */
+  height: 150px; 
 }
 
 @media (max-width: 768px) {
   .bckp-card {
-    scale: .82;
+    scale: .7;
+    margin-top: -50px;
   }
 }
