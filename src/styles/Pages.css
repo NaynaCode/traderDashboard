@@ -24,5 +24,6 @@ body { margin:0; background:#00697132; }
     flex-direction: column;
     gap: 0;
     align-items: center;
+    margin-bottom: 1rem;
   }
 }
