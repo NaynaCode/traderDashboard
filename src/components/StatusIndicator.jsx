@@ -14,7 +14,6 @@ export default function StatusIndicator({ currentUser }) {
         const { status, timestamp } = await fetchStatus();
         setStatus(status);
         
-        // Convert timestamp to readable format
         if (timestamp) {
           const date = new Date(timestamp);
           setLastTimestamp(date);
@@ -48,7 +47,7 @@ export default function StatusIndicator({ currentUser }) {
        <MessageModal
           show={modalOpen}
           title="Last Activity"
-          body={lastUpdate}  // Use formatted string instead of raw timestamp
+          body={lastUpdate} 
           onClose={() => setModalOpen(false)}
         />
     </>

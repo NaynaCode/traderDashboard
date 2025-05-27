@@ -5,7 +5,6 @@ import Navbar from './Navbar';
 function Layout({ currentUser, onUserSwitch }) {
   const navigate = useNavigate();
 
-  // Redirect to user selection if no user is set
   useEffect(() => {
     if (!currentUser) {
       navigate('/');
@@ -13,14 +12,14 @@ function Layout({ currentUser, onUserSwitch }) {
   }, [currentUser, navigate]);
 
   if (!currentUser) {
-    return null; // Prevent rendering until redirected
+    return null; 
   }
 
   return (
     <>
       <Navbar currentUser={currentUser} onUserSwitch={onUserSwitch} />
       <div className="container mt-4">
-        <Outlet /> {/* Renders the matched child route */}
+        <Outlet />
       </div>
     </>
   );

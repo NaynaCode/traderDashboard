@@ -1,4 +1,3 @@
-// src/components/LogsTable.jsx
 import React, { useState, useMemo } from 'react';
 import MessageModal from './MessageModal';
 import '../styles/LogsTable.css';

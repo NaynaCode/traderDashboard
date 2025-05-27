@@ -33,7 +33,6 @@ export default function Dashboard({ currentUser }) {
         setBalance(balanceData.current);
         setBalanceHistory(balanceData.history || []);
 
-        // now fetch backup & usdt based on those logs
         const { backup: b, usdt: u } = await fetchBackup(currentUser.id, logsData);
         setBackup(b);
         setUsdt(u);

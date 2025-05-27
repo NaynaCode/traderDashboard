@@ -17,9 +17,8 @@ function App() {
 
   return (
     <Routes>
-      {/* User selection page at root */}
       <Route path="/" element={<UserSelection setUser={setCurrentUser} />} />
-      {/* Layout wraps pages that require a user */}
+
       <Route element={<Layout currentUser={currentUser} onUserSwitch={handleSwitchUser} />}>
         <Route path="/dashboard" element={<Dashboard currentUser={currentUser} />} />
         <Route path="/chart" element={<Chart currentUser={currentUser} />} />

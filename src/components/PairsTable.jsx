@@ -18,7 +18,6 @@ export default function PairsTable({ pairs = [], target }) {
     return list;
   }, [pairs, search]);
 
-  // Calculate progress towards the sell target
   const calcProgress = (valueStr, baseStr, trg) => {
     const current = parseFloat(valueStr.replace('$','')) || 0;
     const threshold = (parseFloat(baseStr.replace('$','')) || 1) * trg;

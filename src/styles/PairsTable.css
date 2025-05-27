@@ -8,7 +8,6 @@
   overflow-x: auto;
 }
 
-/* Search Bar */
 .pairs-controls {
   display: flex;
   justify-content: flex-end;
@@ -29,10 +28,9 @@
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
 }
 
-/* Table Styles */
 .pairs-table {
   width: 100%;
-  min-width: 800px; /* match your column layout */
+  min-width: 800px; 
   border-collapse: separate;
   border-spacing: 0 0.5rem;
 }
@@ -46,14 +44,13 @@
 
 .pairs-table thead th {
   position: sticky;
-  top: 0;                 /* stick to the very top of .table-wrapper */
+  top: 0;               
   z-index: 2;         
   background: #ebecec;
   font-weight: 600;
   color: #555;
 }
 
-/* Row hover effect */
 .pairs-table tbody tr {
   background: #fff;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -66,19 +63,16 @@
   border-radius: 12px;
   border: dashed 2px #bddddf;
   width: 80px;
-  /* optionally also max-width or flex-shrink: */
 }
 .pairs-table td:nth-child(5) {
   border-bottom: solid 3px #d13d3d;
-  /* optionally also max-width or flex-shrink: */
 }
 
 .pairs-table th:nth-child(7),
 .pairs-table td:nth-child(7) {
   min-width: 240px;
-  /* optionally also max-width or flex-shrink: */
 }
-/* Progress Bar Container & Fill (if you add one) */
+
 .progress-bar-container {
   background: #eceef1;
   border-radius: 12px;
@@ -103,7 +97,6 @@
   text-align: center;
 }
 
-/* Responsive tweaks */
 @media (max-width: 576px) {
   .pairs-table th,
   .pairs-table td {

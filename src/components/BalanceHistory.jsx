@@ -50,7 +50,7 @@ export default function BalanceHistory({ balance, balanceHistory = [] }) {
     const gradient2 = ctx.createLinearGradient(0, 0, 0, 200);
     gradient2.addColorStop(0, 'rgba(255, 0, 0 ,0)');
     gradient2.addColorStop(1, 'rgba(255, 0, 0 ,0.2)');
-    // cleanup old
+
     if (chartInstance.current) chartInstance.current.destroy()
 
     chartInstance.current = new Chart(ctx, {

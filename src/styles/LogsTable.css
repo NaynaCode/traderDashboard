@@ -50,10 +50,9 @@
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
 }
 
-/* Force the table to keep its columns width */
 .logs-table {
-  width: 100%;          /* fill its wrapper */
-  min-width: 800px;     /* adjust to the total of your column widths */
+  width: 100%;          
+  min-width: 800px;    
   border-collapse: separate;
   border-spacing: 0 0.5rem;
 }
@@ -81,7 +80,6 @@
 .logs-table td:nth-child(6) {
   border-radius: 12px;
   border: dashed 2px #bddddf;
-  /* optionally also max-width or flex-shrink: */
 }
 
 .badge {
@@ -105,7 +103,7 @@
   .logs-table th,
   .logs-table td {
     padding: 0.5rem 0.75rem;
-    white-space: nowrap; /* prevent column wrap */
+    white-space: nowrap; 
   }
   .logs-table-container {
     margin-top: -1rem;

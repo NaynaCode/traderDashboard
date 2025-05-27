@@ -14,7 +14,12 @@ function randomPick(arr) {
 }
 
 export default function Navbar({ currentUser, onUserSwitch }) {
-  const [pepaTooltip, setPepaTooltip] = useState('');
+  const [isActive, setIsActive] = useState(false);
+
+  const toggleClass = () => {
+    setIsActive(!isActive);
+  };
+
   const pepaPhrases = [
     'Roooull',
     '🐾🐾',
@@ -51,14 +56,15 @@ export default function Navbar({ currentUser, onUserSwitch }) {
       </ul>
 
       <div className="chars">
-        <h3
+        <div className={`text ${isActive ? 'talking' : 'silent'}`}>
+          <span>{randomPick(pepaPhrases)}</span>
+        </div>
+        <button onClick={toggleClass}
           className="pepa"
-          data-tooltip={pepaTooltip}
-          onMouseEnter={() => setPepaTooltip(randomPick(pepaPhrases))}
-          onMouseLeave={() => setPepaTooltip('')}
+          
         >
           🐕
-        </h3>
+        </button>
 
         <div className="user-switch">
           <ul className="user-menu">

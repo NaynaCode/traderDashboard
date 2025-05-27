@@ -22,7 +22,6 @@ export default function Pairs({ currentUser }) {
   const [usdt,           setUsdt]           = useState(0);
 
   useEffect(() => {
-    // single loader function
     async function loadAll() {
       try {
         const [logsData, pairsData, tgt, bal] = await Promise.all([
