@@ -50,7 +50,6 @@
 
 .trend-row {
   display: flex;
-  flex-wrap: wrap;
   gap: clamp(0.5rem, 2vw, 0.75rem);
   font-size: clamp(0.9rem, 2.5vw, 1rem);
   color: #666;
@@ -74,14 +73,13 @@
     text-align: center;
     align-items: center;
     margin-top: -1rem;
-    flex-direction: row;
-    justify-content: space-around;
   }
   .main-value {
     padding: 0.3rem 0.6rem;
   }
   .value-row,
   .trend-row {
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 1rem;
   }
 }
