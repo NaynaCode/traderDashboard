@@ -58,8 +58,8 @@
     padding: clamp(0.75rem, 5vw, 1rem);
     gap: clamp(0.75rem, 4vw, 1.25rem);
     max-height: 160px;
-    scale: .75;
-    margin-top: -2.5rem;
+    scale: 70%;
+    margin-top: -3.5rem;
     border-top: solid 2px #676e6f75;
   }
 

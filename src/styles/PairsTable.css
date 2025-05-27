@@ -5,7 +5,7 @@
   padding: 1rem;
   margin-top: 1.5rem;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 /* Search Bar */
@@ -27,14 +27,6 @@
   outline: none;
   border-color: #006A71;
   box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
-}
-
-/* Table Wrapper Scroll */
-.table-wrapper {
-  overflow-x: auto;
-  overflow-y: auto;
-  max-height: 300px;
-  -webkit-overflow-scrolling: touch; /* smooth on iOS */
 }
 
 /* Table Styles */

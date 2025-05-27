@@ -11,7 +11,7 @@ import {
   fetchBackup
 } from '../helpers/fetchFunctions';
 
-export default function Dashboard() {
+export default function Dashboard({ currentUser }) {
   const [logs,           setLogs]           = useState([]);
   const [pairs,          setPairs]          = useState([]);
   const [balance,        setBalance]        = useState(0);
@@ -23,9 +23,9 @@ export default function Dashboard() {
     async function loadData() {
       try {
         const [logsData, pairsData, balanceData] = await Promise.all([
-          fetchLogs(),
-          fetchPairs(),
-          fetchBalance()
+          fetchLogs(currentUser.id),
+          fetchPairs(currentUser.id),
+          fetchBalance(currentUser.id)
         ]);
 
         setLogs(logsData);
@@ -34,7 +34,7 @@ export default function Dashboard() {
         setBalanceHistory(balanceData.history || []);
 
         // now fetch backup & usdt based on those logs
-        const { backup: b, usdt: u } = await fetchBackup(logsData);
+        const { backup: b, usdt: u } = await fetchBackup(currentUser.id, logsData);
         setBackup(b);
         setUsdt(u);
 
@@ -46,7 +46,7 @@ export default function Dashboard() {
     loadData();
     const interval = setInterval(loadData, 300_000);
     return () => clearInterval(interval);
-  }, []);
+  }, [currentUser.id]);
 
   return (
     <div className='dashboard-page'>

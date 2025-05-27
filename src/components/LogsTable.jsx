@@ -42,7 +42,7 @@ export default function LogsTable({ logs }) {
             onChange={e=>setSearch(e.target.value)}
           />
         </div>
-        <div className="table-wrapper">
+        <div>
           <table className="logs-table">
             <thead>
               <tr>

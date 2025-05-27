@@ -12,7 +12,7 @@ import {
   fetchBackup
 } from '../helpers/fetchFunctions';
 
-export default function Pairs() {
+export default function Pairs({ currentUser }) {
   const [logs,           setLogs]           = useState([]);
   const [pairs,          setPairs]          = useState([]);
   const [target,         setTarget]         = useState(1.5);
@@ -26,10 +26,10 @@ export default function Pairs() {
     async function loadAll() {
       try {
         const [logsData, pairsData, tgt, bal] = await Promise.all([
-          fetchLogs(),
-          fetchPairs(),
-          fetchTarget(),
-          fetchBalance()
+          fetchLogs(currentUser.id),
+          fetchPairs(currentUser.id),
+          fetchTarget(currentUser.id),
+          fetchBalance(currentUser.id)
         ]);
         setLogs(logsData);
         setPairs(pairsData);
@@ -37,7 +37,7 @@ export default function Pairs() {
         setBalance(bal.current);
         setBalanceHistory(bal.history);
 
-        const { backup: b, usdt: u } = await fetchBackup(logsData);
+        const { backup: b, usdt: u } = await fetchBackup(currentUser.id, logsData);
             setBackup(b);
             setUsdt(u);
       } catch (err) {

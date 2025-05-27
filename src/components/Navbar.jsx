@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import StatusIndicator from './StatusIndicator'
 import '../styles/Navbar.css';
 
 const users = [
@@ -28,7 +29,7 @@ export default function Navbar({ currentUser, onUserSwitch }) {
     <nav className="navbar">
       <div className="hdr">
         <NavLink to="/dashboard" className="brand">CryptoTrading</NavLink>
-        {/* Include StatusIndicator if it exists */}
+        <StatusIndicator currentUser={currentUser}/>
       </div>
 
       <ul className="nav-menu">

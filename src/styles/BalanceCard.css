@@ -2,6 +2,9 @@
 
 /* Container */
 .stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -76,7 +79,10 @@
   .stat-card {
     padding: 1rem;
     max-height: 160px;
-    scale: .8;
+    scale: 75%;
+    text-align: center;
+    align-items: center;
+    margin-top: -1rem;
   }
   .main-value {
     padding: 0.3rem 0.6rem;

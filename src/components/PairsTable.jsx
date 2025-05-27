@@ -40,7 +40,7 @@ export default function PairsTable({ pairs = [], target }) {
           onChange={e => setSearch(e.target.value)}
         />
       </div>
-      <div className="table-wrapper">
+      <div>
         <table className="pairs-table">
           <thead>
             <tr>

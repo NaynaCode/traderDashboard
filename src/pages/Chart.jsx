@@ -11,7 +11,7 @@ import {
   fetchBackup
 } from '../helpers/fetchFunctions';
 
-export default function Chart() {
+export default function Chart({ currentUser }) {
   const [logs,           setLogs]           = useState([]);
   const [pairs,          setPairs]          = useState([]);
   const [balance,        setBalance]        = useState(0);
@@ -23,16 +23,16 @@ export default function Chart() {
     async function loadAll() {
       try {
         const [logsData, pairsData, balData] = await Promise.all([
-          fetchLogs(),
-          fetchPairs(),
-          fetchBalance()
+          fetchLogs(currentUser.id),
+          fetchPairs(currentUser.id),
+          fetchBalance(currentUser.id)
         ]);
         setLogs(logsData);
         setPairs(pairsData);
         setBalance(balData.current);
         setBalanceHistory(balData.history);
 
-        const { backup: b, usdt: u } = await fetchBackup(logsData);
+        const { backup: b, usdt: u } = await fetchBackup(currentUser.id, logsData);
         setBackup(b);
         setUsdt(u);
       } catch (err) {

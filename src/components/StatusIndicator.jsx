@@ -2,16 +2,31 @@ import React, { useEffect, useState } from 'react';
 import MessageModal from './MessageModal';
 import { fetchStatus } from '../helpers/fetchFunctions';
 
-export default function StatusIndicator() {
+export default function StatusIndicator({ currentUser }) {
   const [status, setStatus] = useState('stopped');
   const [lastTimestamp, setLastTimestamp] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState('');
 
   useEffect(() => {
     const loadStatus = async () => {
-      const { status, timestamp } = await fetchStatus();
-      setStatus(status);
-      setLastTimestamp(timestamp);
+      try {
+        const { status, timestamp } = await fetchStatus();
+        setStatus(status);
+        
+        // Convert timestamp to readable format
+        if (timestamp) {
+          const date = new Date(timestamp);
+          setLastTimestamp(date);
+          setLastUpdate(date.toLocaleString());
+        } else {
+          setLastTimestamp(null);
+          setLastUpdate('Never');
+        }
+      } catch (err) {
+        console.error('Status check failed:', err);
+        setStatus('error');
+      }
     };
 
     loadStatus();
@@ -30,12 +45,12 @@ export default function StatusIndicator() {
         {healthy ? '🟢 RUNNING' : '🔴 OFFLINE'}
       </div>
 
-      <MessageModal
-        show={modalOpen}
-        title="Last Activity"
-        body={lastTimestamp || 'No data available'}
-        onClose={() => setModalOpen(false)}
-      />
+       <MessageModal
+          show={modalOpen}
+          title="Last Activity"
+          body={lastUpdate}  // Use formatted string instead of raw timestamp
+          onClose={() => setModalOpen(false)}
+        />
     </>
   );
 }
