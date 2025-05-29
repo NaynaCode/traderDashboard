@@ -28,38 +28,40 @@ export default function BackupCard({
   usdt   = 0
 }) {
   const { pieData, tokensTotal } = useMemo(() => {
-    // coerce to array
+
     const safePairs = Array.isArray(pairs) ? pairs : [];
     
-    // extract token values
+    const symbols     = safePairs.map(p => p.symbol);
     const tokenValues = safePairs.map(p =>
       parseFloat(p.value?.replace('$','')) || 0
     );
     const tokensTotal = tokenValues.reduce((sum, v) => sum + v, 0);
     
-    // final slice is USDT
-    const data = [...tokenValues, usdt];
+    symbols.push('USDT');
+    tokenValues.push(usdt);
 
     // colors
-    const backgroundColor = data.map((_, i) =>
-      i === data.length - 1
+    const backgroundColor = tokenValues.map((_, i) =>
+      i === tokenValues.length - 1
         ? '#d3d3d3'
         : pairColors[i % pairColors.length]
     );
-    const hoverBackgroundColor = data.map((_, i) =>
-      i === data.length - 1
+    const hoverBackgroundColor = tokenValues.map((_, i) =>
+      i === tokenValues.length - 1
         ? '#3f3f3f'
         : pairHoverColors[i % pairHoverColors.length]
     );
 
-    // **always** return an object
     return {
+      labels: symbols,
       pieData: {
+        labels:      symbols,          
         datasets: [{
-          data,
+          data:                 tokenValues,
           backgroundColor,
           hoverBackgroundColor,
-          hoverOffset: 8
+          hoverOffset:         8,
+          borderWidth:         1,
         }]
       },
       tokensTotal
@@ -80,9 +82,26 @@ export default function BackupCard({
       </div>
 
       <div className="pie-chart-container">
-        <Pie data={pieData} options={{
-          maintainAspectRatio: false,
-        }} />
+        <Pie
+          data={pieData}
+          options={{
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const value    = context.parsed;           // raw slice value
+                    const total    = context.chart._metasets[0].total;
+                    const percent  = (value / total) * 100;
+                    const label    = context.label;             // symbol name
+                    return `${label}: ${percent.toFixed(2)}%`;
+                  }
+                }
+              },
+              legend: { display: false }
+            }
+          }}
+        />
       </div>
 
       <div className='d-flex flex-column justify-content-center'>
