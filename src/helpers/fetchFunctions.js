@@ -66,24 +66,21 @@ export async function fetchStatus(userId) {
     const res = await fetch(`${STATUS_URL}?user_id=${userId}`);
     const data = await res.json();
 
+    // if no timestamp, treat as stopped
     if (!data.timestamp) {
-      return {
-        status: 'stopped',
-        timestamp: null
-      };
+      return { status: 'stopped', timestamp: null };
     }
 
+    // leave timestamp as the raw ISO string
     const ts = new Date(data.timestamp);
     const ageInSeconds = (Date.now() - ts.getTime()) / 1000;
 
     return {
-      status: ageInSeconds <= 1800 ? 'running' : 'stopped',
-      timestamp: ts.toLocaleString()
+      status: ageInSeconds <= 2400 ? 'running' : 'stopped', // 40 min = 2400 s
+      timestamp: data.timestamp
     };
-  } catch {
-    return {
-      status: 'stopped',
-      timestamp: null
-    };
+  } catch (err) {
+    console.error('fetchStatus error:', err);
+    return { status: 'stopped', timestamp: null };
   }
 }

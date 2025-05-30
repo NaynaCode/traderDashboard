@@ -4,36 +4,27 @@ import { fetchStatus } from '../helpers/fetchFunctions';
 
 export default function StatusIndicator({ currentUser }) {
   const [status, setStatus] = useState('stopped');
-  const [lastTimestamp, setLastTimestamp] = useState(null);
+  const [rawTimestamp, setRawTimestamp] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState('');
 
   useEffect(() => {
-    const loadStatus = async () => {
-      try {
-        const { status, timestamp } = await fetchStatus();
-        setStatus(status);
-        
-        if (timestamp) {
-          const date = new Date(timestamp);
-          setLastTimestamp(date);
-          setLastUpdate(date.toLocaleString());
-        } else {
-          setLastTimestamp(null);
-          setLastUpdate('Never');
-        }
-      } catch (err) {
-        console.error('Status check failed:', err);
-        setStatus('error');
-      }
+    if (!currentUser) return;
+
+    const load = async () => {
+      const { status, timestamp } = await fetchStatus(currentUser.id);
+      setStatus(status);
+      setRawTimestamp(timestamp);
     };
 
-    loadStatus();
-    const intervalId = setInterval(loadStatus, 120_000);
-    return () => clearInterval(intervalId);
-  }, []);
+    load();
+    const id = setInterval(load, 120_000);
+    return () => clearInterval(id);
+  }, [currentUser]);
 
   const healthy = status === 'running';
+  const displayTime = rawTimestamp
+    ? new Date(rawTimestamp).toLocaleString()
+    : 'Never';
 
   return (
     <>
@@ -44,12 +35,12 @@ export default function StatusIndicator({ currentUser }) {
         {healthy ? '🟢 RUNNING' : '🔴 OFFLINE'}
       </div>
 
-       <MessageModal
-          show={modalOpen}
-          title="Last Activity"
-          body={lastUpdate} 
-          onClose={() => setModalOpen(false)}
-        />
+      <MessageModal
+        show={modalOpen}
+        title="Last Activity"
+        body={displayTime}
+        onClose={() => setModalOpen(false)}
+      />
     </>
   );
 }
